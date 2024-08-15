@@ -8,6 +8,7 @@
     <div v-for="(product, index) in products" :key="index">
       <h4>{{ product }}</h4>
       <p>{{ prices[index] }} 만원</p>
+      <button @click="increase(index)">허위매물신고</button> <span>신고수 : {{ counts[index] }}</span>
     </div>
   </div>
 </template>
@@ -21,7 +22,13 @@ export default {
       products: ['역삼동원룸', '천호동원룸', '마포구원룸'],
       prices: [30, 40, 50],
       menus: ['HOME', 'SHOP', 'ABOUT'],
+      counts: [0, 0, 0],
     };
+  },
+  methods: {
+    increase(i) {
+      this.counts[i]++;
+    },
   },
   components: {},
 };
