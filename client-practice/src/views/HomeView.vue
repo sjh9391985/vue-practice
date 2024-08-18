@@ -12,7 +12,7 @@ export default {
   methods: {
     getData() {
       axios
-        .get('http://localhost:8080')
+        .post('http://localhost:8080/findAll')
         .then((response) => {
           console.log('response: ', response);
         })
