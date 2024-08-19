@@ -9,9 +9,7 @@
 import axios from 'axios';
 
 const uForm = { no: 1, name: '손재현', email: 'sjh9391985@gmail.com', pwd: '1234', gender: true };
-// const params = {
-//   params: { no: 1 },
-// };
+
 export default {
   name: 'HomeView',
   methods: {

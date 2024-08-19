@@ -13,10 +13,10 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="cursor-pointer" v-for="row in result" v-bind:key="row.no" v-on:click="href(row)">
+        <tr class="cursor-pointer" v-for="row in result" v-bind:key="row.no" @click="location.href = '/user/findById'">
           <td>{{ row.name }}</td>
           <td>{{ row.email }}</td>
-          <td>{{ dateTime(row.regDate) }}</td>
+          <td>{{ row.regDate }}</td>
         </tr>
       </tbody>
     </table>
@@ -25,17 +25,29 @@
 
 <script>
 import axios from 'axios';
-import dayjs from 'dayjs';
+
 export default {
   name: 'ListView',
   data() {
     return {
-      result: [],
+      result: [{ no: 1, name: '손재현', email: 'sjh9391985@gmail.com', regDate: '2024-08-19' }],
     };
   },
   created() {
-    console.log('List', this.$store.state.user);
     this.getData();
+  },
+  methods: {
+    getData() {
+      axios
+        .post('http://localhost:8080/findAll')
+        .then((response) => {
+          console.log('response: ', response.data.result);
+          this.result = response.data.result;
+        })
+        .catch((error) => {
+          console.log('error: ', error);
+        });
+    },
   },
 };
 </script>
