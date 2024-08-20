@@ -25,7 +25,7 @@
 
 <script>
 import axios from 'axios';
-
+import store from '../store';
 export default {
   name: 'ListView',
   data() {
@@ -50,6 +50,7 @@ export default {
     },
     href(row) {
       console.log('row : ', row);
+      store.commit('setUser', row);
       this.$router.push({ name: 'SelectView' });
     },
   },
