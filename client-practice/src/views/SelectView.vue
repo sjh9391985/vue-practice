@@ -85,7 +85,7 @@
 </template>
 
 <script>
-// import axios from 'axios';
+import axios from 'axios';
 export default {
   name: 'SelectView',
   data() {
@@ -99,20 +99,20 @@ export default {
   },
   methods: {
     edit() {
-      // this.$router.push({ name: 'UpdateView' });
+      this.$router.push({ name: 'UpdateView' });
     },
     del() {
-      // const params = { params: { no: this.result.no } };
-      // axios
-      //   .delete(process.env.VUE_APP_BASEURL + '/delete', params)
-      //   .then((res) => {
-      //     if (res.data.state) {
-      //       this.cancel();
-      //     } else {
-      //       alert(res.data.message);
-      //     }
-      //   })
-      //   .catch((err) => console.log(err));
+      const params = { params: { no: this.result.no } };
+      axios
+        .delete(process.env.VUE_APP_BASEURL + '/delete', params)
+        .then((res) => {
+          if (res.data.state) {
+            this.cancel();
+          } else {
+            alert(res.data.message);
+          }
+        })
+        .catch((err) => console.log(err));
     },
     cancel() {
       this.$store.commit('setUser', {});
