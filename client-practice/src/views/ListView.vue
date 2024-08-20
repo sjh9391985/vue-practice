@@ -13,7 +13,7 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="cursor-pointer" v-for="row in result" v-bind:key="row.no" @click="location.href = '/user/findById'">
+        <tr class="cursor-pointer" v-for="row in result" v-bind:key="row.no" v-on:click="($event) => href(row)">
           <td>{{ row.name }}</td>
           <td>{{ row.email }}</td>
           <td>{{ row.regDate }}</td>
@@ -47,6 +47,10 @@ export default {
         .catch((error) => {
           console.log('error: ', error);
         });
+    },
+    href(row) {
+      console.log('row : ', row);
+      this.$router.push({ name: 'SelectView' });
     },
   },
 };

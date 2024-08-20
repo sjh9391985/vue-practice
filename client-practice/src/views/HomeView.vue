@@ -15,7 +15,7 @@ export default {
   methods: {
     getData() {
       axios
-        .put('http://localhost:8080/save', uForm)
+        .put('http://localhost:8080/', uForm)
         .then((response) => {
           console.log('response: ', response);
         })
