@@ -80,7 +80,7 @@
 </template>
 
 <script>
-// import axios from 'axios'
+import axios from 'axios';
 export default {
   name: 'UpdateView',
   data() {
@@ -93,25 +93,25 @@ export default {
   },
   methods: {
     save() {
-      // axios
-      //   .post(process.env.VUE_APP_BASEURL + '/editById', this.result)
-      //   .then((res) => {
-      //     console.log(res)
-      //     if (res.data.state) {
-      //       this.$store.commit('setUser', this.result)
-      //       sessionStorage.setItem('setUser', this.base64(this.result))
-      //       this.cancel()
-      //     } else {
-      //       alert(res.data.message)
-      //     }
-      //   })
-      //   .catch((err) => console.log(err))
+      axios
+        .post(process.env.VUE_APP_BASEURL + '/editById', this.result)
+        .then((res) => {
+          console.log(res);
+          if (res.data.state) {
+            this.$store.commit('setUser', this.result);
+            sessionStorage.setItem('setUser', this.base64(this.result));
+            this.cancel();
+          } else {
+            alert(res.data.message);
+          }
+        })
+        .catch((err) => console.log(err));
     },
     cancel() {
-      // this.$router.push({ name: 'SelectView' })
+      this.$router.push({ name: 'SelectView' });
     },
     base64() {
-    // user
+      // user
       // return window.btoa(encodeURIComponent(JSON.stringify(user)))
     },
   },
