@@ -51,6 +51,7 @@ export default {
     href(row) {
       console.log('row : ', row);
       store.commit('setUser', row);
+      sessionStorage.setItem('setUser', JSON.stringify(row));
       this.$router.push({ name: 'SelectView' });
     },
   },

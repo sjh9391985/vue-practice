@@ -110,9 +110,8 @@ export default {
     cancel() {
       this.$router.push({ name: 'SelectView' });
     },
-    base64() {
-      // user
-      // return window.btoa(encodeURIComponent(JSON.stringify(user)))
+    base64(user) {
+      return window.btoa(encodeURIComponent(JSON.stringify(user)));
     },
   },
 };
