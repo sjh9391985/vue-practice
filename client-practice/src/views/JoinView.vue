@@ -4,34 +4,34 @@
       <h2 class="text-center mb-4">회원가입</h2>
       <form @submit.prevent="handleSubmit">
         <div class="form-group">
-          <label for="username" class="form-label">사용자 이름:</label>
+          <label for="name" class="form-label">사용자 이름:</label>
           <input
             type="text"
             class="form-control"
-            id="username"
-            v-model="form.username"
+            id="name"
+            v-model="form.name"
             placeholder="사용자 이름을 입력하세요."
             required
           />
         </div>
         <div class="form-group">
-          <label for="userId" class="form-label">아이디:</label>
+          <label for="userid" class="form-label">아이디:</label>
           <input
             class="form-control"
             type="text"
-            id="userId"
-            v-model="form.userId"
-            placeholder="이메일을 입력하세요."
+            id="userid"
+            v-model="form.userid"
+            placeholder="아이디를 입력하세요."
             required
           />
         </div>
         <div class="form-group">
-          <label for="password" class="form-label">비밀번호:</label>
+          <label for="pwd" class="form-label">비밀번호:</label>
           <input
             type="password"
             class="form-control"
-            id="password"
-            v-model="form.password"
+            id="pwd"
+            v-model="form.pwd"
             placeholder="비밀번호를 입력하세요."
             required
           />
@@ -39,7 +39,7 @@
         <div class="form-group">
           <label for="confirmPassword" class="form-label">비밀번호 확인:</label>
           <input
-            type="password"
+            type="pwd"
             class="form-control"
             id="confirmPassword"
             v-model="form.confirmPassword"
@@ -63,22 +63,22 @@ export default {
   data() {
     return {
       form: {
-        username: '',
-        userId: '',
-        password: '',
+        name: '',
+        userid: '',
+        pwd: '',
         confirmPassword: '',
       },
       isDuplicated: false,
     };
   },
   watch: {
-    'form.username': function (newVal) {
+    'form.name': function (newVal) {
       console.log('사용자 이름 입력 중:', newVal);
     },
-    'form.userId': function (userId) {
-      this.checkDuplicateId(userId);
+    'form.userid': function (userid) {
+      this.checkDuplicateId(userid);
     },
-    'form.password': function (newVal) {
+    'form.pwd': function (newVal) {
       console.log('비밀번호 입력 중:', newVal);
     },
     'form.confirmPassword': function (newVal) {
@@ -86,25 +86,38 @@ export default {
     },
   },
   methods: {
-    checkDuplicateId(userId) {
+    checkDuplicateId(userid) {
       axios
-        .put('http://localhost:8080/', userId)
+        .get(process.env.VUE_APP_BASEURL + '/userid', {
+          params: {
+            userID: userid,
+          },
+        })
         .then((response) => {
-          console.log('response: ', response);
+          if (response.data) {
+            alert('이미 있는 아이디 입니다.');
+          }
         })
         .catch((error) => {
           console.log('error: ', error);
         });
     },
     handleSubmit() {
-      if (this.form.password !== this.form.confirmPassword) {
+      if (this.form.pwd !== this.form.confirmPassword) {
         alert('비밀번호가 일치하지 않습니다.');
         return;
       }
-      // 여기서 회원가입 요청을 처리할 수 있습니다.
-      // 예를 들어, Axios 등을 사용해 서버에 데이터를 보낼 수 있습니다.
+      axios
+        .put(process.env.VUE_APP_BASEURL + '/save', this.form)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log('error: ', error);
+        });
+
       alert('회원가입이 완료되었습니다!');
-      this.$router.push('/login');
+      this.$router.push('/');
     },
   },
 };
