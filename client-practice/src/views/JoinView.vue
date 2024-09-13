@@ -39,7 +39,7 @@
         <div class="form-group">
           <label for="confirmPassword" class="form-label">비밀번호 확인:</label>
           <input
-            type="pwd"
+            type="password"
             class="form-control"
             id="confirmPassword"
             v-model="form.confirmPassword"
@@ -86,6 +86,16 @@ export default {
     },
   },
   methods: {
+    validateUserId(userid) {
+      const userIdPattern = /^[a-zA-Z][a-zA-Z0-9]{2,19}$/;
+      if (!userIdPattern.test(userid)) {
+        alert('아이디는 영문자로 시작하고 3자 이상, 20자 이하이며 숫자와 영문자만 포함할 수 있습니다.');
+        this.form.userid = '';
+        return false;
+      }
+      return true;
+    },
+
     checkDuplicateId(userid) {
       axios
         .get(process.env.VUE_APP_BASEURL + '/userid', {
@@ -96,6 +106,7 @@ export default {
         .then((response) => {
           if (response.data) {
             alert('이미 있는 아이디 입니다.');
+            this.form.userid = '';
           }
         })
         .catch((error) => {
@@ -107,6 +118,8 @@ export default {
         alert('비밀번호가 일치하지 않습니다.');
         return;
       }
+      if (!this.validateUserId(this.form.userid)) return;
+
       axios
         .put(process.env.VUE_APP_BASEURL + '/save', this.form)
         .then((response) => {
