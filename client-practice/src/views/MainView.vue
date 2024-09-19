@@ -1,35 +1,9 @@
 <template>
-  <div class="main-container">
-    <div class="login-card">
-      <form>
-        <div class="form-group">
-          <label for="email" class="form-label">아이디:</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            placeholder="이메일을 입력하세요."
-            name="email"
-            autocomplete="off"
-          />
-        </div>
-        <div class="form-group">
-          <label for="pwd" class="form-label">비밀번호:</label>
-          <input
-            type="password"
-            class="form-control"
-            id="pwd"
-            placeholder="비밀번호를 입력하세요."
-            name="pwd"
-            autocomplete="off"
-          />
-        </div>
-        <div class="form-buttons">
-          <button type="button" class="btn btn-primary btn-block">로그인</button>
-          <router-link to="/join" class="btn btn-secondary btn-block">회원가입</router-link>
-          <router-link to="/user" class="btn btn-secondary btn-block">비밀번호 찾기</router-link>
-        </div>
-      </form>
+  <div class="product-list">
+    <div class="product-card" v-for="product in products" :key="product.productId" @click="goToDetail(product)">
+      <img :src="product.imageUrl" alt="Product Image" class="product-image" />
+      <h3>{{ product.productName }}</h3>
+      <p>{{ formatPrice(product.basePrice) }}원</p>
     </div>
   </div>
 </template>
@@ -37,83 +11,73 @@
 <script>
 import axios from 'axios';
 
-const uForm = { no: 1, name: '손재현', email: 'sjh9391985@gmail.com', pwd: '1234', gender: true };
-
 export default {
   name: 'MainView',
+  data() {
+    return {
+      products: [], // 상품 리스트 초기화
+    };
+  },
   methods: {
-    getData() {
+    // 가격 포맷팅 함수 (예: 1,000원 형식으로 표시)
+    formatPrice(price) {
+      return price.toLocaleString();
+    },
+    // API 호출로 데이터 가져오기
+    fetchProducts() {
       axios
-        .put('http://localhost:8080/', uForm)
-        .then((response) => {
-          console.log('response: ', response);
+        .get('http://localhost:8081/product')
+        .then((response) => { 
+          console.log(response)
+          this.products = response.data.resultData; // 백엔드로부터 받은 데이터를 products에 저장
         })
         .catch((error) => {
-          console.log('error: ', error);
+          console.error('Error fetching products:', error);
         });
     },
+     goToDetail(product) {
+      this.$router.push({ name: 'ProductDetail', params: { product } }); // Vue Router 사용
+    },
+  },
+  mounted() {
+    this.fetchProducts(); // 컴포넌트가 로드되면 API 호출
   },
 };
 </script>
 
 <style scoped>
-.main-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f5f5f5;
-}
-
-.login-card {
-  background: #ffffff;
-  border-radius: 10px;
+.product-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3개의 열 */
+  gap: 20px; /* 각 상품 카드 간의 간격 */
   padding: 20px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px;
+  background-color: #f9f9f9;
 }
 
-.form-group {
-  margin-bottom: 20px; /* 입력 필드 간의 간격 조정 */
+.product-card {
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 15px;
+  text-align: center;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.form-buttons {
-  display: flex;
-  flex-direction: column;
+.product-card h3 {
+  margin-bottom: 10px;
+  font-size: 18px;
+  color: #333;
 }
 
-.form-buttons .btn {
-  margin-bottom: 15px; /* 버튼 간의 간격 추가 */
-}
-
-.form-buttons .btn:last-child {
-  margin-bottom: 0; /* 마지막 버튼 아래쪽 여백 제거 */
-}
-
-.btn-block {
-  width: 100%;
+.product-card p {
   font-size: 16px;
-  padding: 10px;
+  color: #666;
 }
 
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-}
-
-.btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
-}
-
-.btn-secondary {
-  background-color: #6c757d;
-  border-color: #6c757d;
-}
-
-.btn-secondary:hover {
-  background-color: #5a6268;
-  border-color: #545b62;
+.product-image {
+  max-width: 100%; /* 이미지가 카드의 너비를 초과하지 않도록 */
+  height: auto; /* 비율 유지 */
+  border-radius: 5px; /* 이미지 모서리 둥글게 */
+  margin-bottom: 10px; /* 제목과 간격 조정 */
 }
 </style>
