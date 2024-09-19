@@ -35,8 +35,8 @@ export default {
           console.error('Error fetching products:', error);
         });
     },
-     goToDetail(product) {
-      this.$router.push({ name: 'ProductDetail', params: { product } }); // Vue Router 사용
+    goToDetail(product) {
+      this.$router.push({ name: 'ProductDetail', params: { productId: product.productId } }); // productId를 URL 파라미터로 전달
     },
   },
   mounted() {
